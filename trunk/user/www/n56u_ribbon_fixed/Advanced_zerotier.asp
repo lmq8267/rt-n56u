@@ -24,19 +24,15 @@
 <script type="text/javascript" src="/help_b.js"></script>
 <script>
 var $j = jQuery.noConflict();
-
 $j(document).ready(function() {
-
 	init_itoggle('zerotier_enable');
 	init_itoggle('zerotier_nat');
-
+	init_itoggle('zerotiermoon_enable');
 });
-
 </script>
 <script>
-
+<% zerotier_status(); %>
 <% login_state_hook(); %>
-
 var m_list = [<% get_nvram_list("ZeroConf", "ZeroList"); %>];
 var mlist_ifield = 4;
 if(m_list.length > 0){
@@ -49,30 +45,34 @@ var isMenuopen = 0;
 function initial(){
 	show_banner(2);
 	show_menu(5,17,0);
-showmenu();
-showMRULESList();
+	showmenu();
+	fill_status(zerotier_status());
+	showMRULESList();
 	show_footer();
-
 }
 function showmenu(){
 showhide_div('allink', found_app_aliddns());
 }
 function applyRule(){
-//	if(validForm()){
-		showLoading();
-		
-		document.form.action_mode.value = " Restart ";
-		document.form.current_page.value = "/Advanced_zerotier.asp";
-		document.form.next_page.value = "";
-		
-		document.form.submit();
-//	}
+	showLoading();
+	
+	document.form.action_mode.value = " Restart ";
+	document.form.current_page.value = "/Advanced_zerotier.asp";
+	document.form.next_page.value = "";
+	
+	document.form.submit();
 }
-
 function done_validating(action){
 	refreshpage();
 }
-
+function fill_status(status_code){
+	var stext = "Unknown";
+	if (status_code == 0)
+		stext = "<#Stopped#>";
+	else if (status_code == 1)
+		stext = "<#Running#>";
+	$("zerotier_status").innerHTML = '<span class="label label-' + (status_code != 0 ? 'success' : 'warning') + '">' + stext + '</span>';
+}
 function markGroupRULES(o, c, b) {
 	document.form.group_id.value = "ZeroList";
 	if(b == " Add "){
@@ -106,7 +106,6 @@ function markGroupRULES(o, c, b) {
 	document.form.action_mode.value = b;
 	return true;
 }
-
 function showMRULESList(){
 	var code = '<table width="100%" cellspacing="0" cellpadding="3" class="table table-list">';
 	if(m_list.length == 0)
@@ -135,7 +134,6 @@ function showMRULESList(){
 	code +='</table>';
 	$("MRULESList_Block").innerHTML = code;
 }
-
 </script>
 </head>
 
@@ -189,15 +187,15 @@ function showMRULESList(){
 							<h2 class="box_head round_top"><#menu5_32#> - <#menu5_30#></h2>
 							<div class="round_bottom">
 							<div>
-                            <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+							    <ul class="nav nav-tabs" style="margin-bottom: 10px;">
 								<li id="allink" style="display:none">
-                                    <a href="Advanced_aliddns.asp"><#menu5_23_1#></a>
-                                </li>
+								    <a href="Advanced_aliddns.asp"><#menu5_23_1#></a>
+								</li>
 								<li class="active">
-                                    <a href="Advanced_zerotier.asp"><#menu5_32_1#></a>
-                                </li>
-                            </ul>
-                        </div>
+								    <a href="Advanced_zerotier.asp"><#menu5_32_1#></a>
+								</li>
+							    </ul>
+							</div>
 								<div class="row-fluid">
 									<div id="tabMenu" class="submenuBlock"></div>
 									<div class="alert alert-info" style="margin: 10px;">
@@ -206,8 +204,11 @@ function showMRULESList(){
 									</div>
 
 									<table width="100%" align="center" cellpadding="4" cellspacing="0" class="table">
+									<tr> <th><#running_status#></th>
+                                            <td id="zerotier_status" colspan="3"></td>
+                                        </tr>
 										<tr>
-											<th width="30%" style="border-top: 0 none;">启用ZeroTier</th>
+											<th width="30%" style="border-top: 0 none;">启用ZeroTier客户端</th>
 											<td style="border-top: 0 none;">
 													<div class="main_itoggle">
 													<div id="zerotier_enable_on_of">
@@ -221,12 +222,17 @@ function showMRULESList(){
 											</td>
 
 										</tr>
-										</tr>
-<tr><th>ZeroTier Network ID</th>
+										
+<tr><th>ZeroTier World Network ID</th>
 				<td>
 					<input type="text" class="input" name="zerotier_id" id="zerotier_id" style="width: 200px" value="<% nvram_get_x("","zerotier_id"); %>" />
 				</td>
 			</tr>
+<tr><th>ZeroTier Moon Network ID</th>
+				<td>
+					<input type="text" class="input" name="zerotier_moonid" id="zerotier_moonid" style="width: 200px" value="<% nvram_get_x("","zerotier_moonid"); %>" />
+				</td>
+			</tr>			
 			<tr>
 											<th width="30%" style="border-top: 0 none;">自动允许客户端NAT</th>
 											<td style="border-top: 0 none;">
@@ -243,6 +249,34 @@ function showMRULESList(){
 											</td>
 
 										</tr>
+										
+<tr>
+											<th width="30%" style="border-top: 0 none;">启用ZeroTier Moon服务器</th>
+											<td style="border-top: 0 none;">
+													<div class="main_itoggle">
+													<div id="zerotiermoon_enable_on_of">
+														<input type="checkbox" id="zerotiermoon_enable_fake" <% nvram_match_x("", "zerotiermoon_enable", "1", "value=1 checked"); %><% nvram_match_x("", "zerotiermoon_enable", "0", "value=0"); %>  />
+													</div>
+												</div>
+												<div style="position: absolute; margin-left: -10000px;">
+													<input type="radio" value="1" name="zerotiermoon_enable" id="zerotiermoon_enable_1" class="input" value="1" <% nvram_match_x("", "zerotiermoon_enable", "1", "checked"); %> /><#checkbox_Yes#>
+													<input type="radio" value="0" name="zerotiermoon_enable" id="zerotiermoon_enable_0" class="input" value="0" <% nvram_match_x("", "zerotiermoon_enable", "0", "checked"); %> /><#checkbox_No#>
+												</div>
+											</td>
+
+										</tr>
+<tr><th>ZeroTier Moon服务器 IP or DomainName</th>
+				<td>
+					<input type="text" class="input" name="zerotiermoon_ip" id="zerotiermoon_ip" style="width: 200px" value="<% nvram_get_x("","zerotiermoon_ip"); %>" />
+					<br>如果没有填写，将使用Wan获得的IP（请注意为公网IP）；如果填写IP地址，将使用该IP（请注意为公网IP）；如果填写域名，将使用域名获得IP（请注意为公网IP）。
+				</td>
+			</tr>
+<tr><th>ZeroTier Moon服务器 ID</th>
+				<td>
+					<input type="text" class="input" name="zerotiermoon_id" id="zerotiermoon_id" style="width: 200px" value="<% nvram_get_x("","zerotiermoon_id"); %>" readonly />
+					<br>服务器启用后自动生成Moon服务器的ID，在加入Moon时请使用客户端zerotier-cli orbit <该ID> <该ID>。
+				</td>
+			</tr>
 										<tr>
 											<th>zerotier官网</th>
 											<td>
@@ -313,4 +347,3 @@ function showMRULESList(){
 </div>
 </body>
 </html>
-
