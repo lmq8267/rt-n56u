@@ -222,7 +222,7 @@ function showMRULESList(){
 
 										</tr>
 										</tr>
-<tr><th>ZeroTier World Network ID</th>
+<tr><th>ZeroTier 网络ID</th>
 				<td>
 					<input type="text" class="input" name="zerotier_id" id="zerotier_id" style="width: 200px" value="<% nvram_get_x("","zerotier_id"); %>" />
 				</td>
