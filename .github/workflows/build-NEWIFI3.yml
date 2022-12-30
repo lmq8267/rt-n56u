@@ -64,7 +64,6 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL/d' .config #删除配置项ARIA_WEB
         sed -i '/CONFIG_FIRMWARE_INCLUDE_TRANSMISSION_WEB_CONTROL/d' .config #删除配置项TRANSMISSION_WEB
         sed -i '/CONFIG_FIRMWARE_INCLUDE_TRANSMISSION/d' .config #删除配置项TRANSMISSION
-        sed -i '/CONFIG_FIRMWARE_INCLUDE_XUPNPD/d' .config #删除配置项XUPNPD
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE/d' .config #删除配置项OPENSSL_EXE
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EC/d' .config #删除配置项OPENSSL_EC
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' .config #删除配置项OPENVPN
@@ -78,6 +77,9 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_WYY/d' .config #删除配置项网易云解锁
         sed -i '/CONFIG_FIRMWARE_INCLUDE_DDNSTO/d' .config #删除配置项ddnsto
         sed -i '/CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME/d' .config #删除配置项dns去广告
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_WIREGUARD/d' .config #删除配置项WIREGUARD
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_XRAY/d' .config #删除配置项XRAY
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_V2RAY/d' .config #删除配置项V2RAY
         ######################################################################
         #以下选项是定义你需要的功能（y=集成,n=忽略），重新写入到.config文件
         ######################################################################
@@ -91,9 +93,6 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_CURL=y" >> .config #CURL
         echo "CONFIG_FIRMWARE_INCLUDE_ARIA=y" >> .config #ARIA
         echo "CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y" >> .config #ARIA_WEB
-        echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION_WEB_CONTROL=y" >> .config #TRANSMISSION_WEB
-        echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION=y" >> .config #TRANSMISSION
-        echo "CONFIG_FIRMWARE_INCLUDE_XUPNPD=y" >> .config #XUPNPD
         echo "CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=y" >> .config #OPENSSL_EXE
         echo "CONFIG_FIRMWARE_INCLUDE_OPENSSL_EC=y" >> .config #OPENSSL_EC
         echo "CONFIG_FIRMWARE_INCLUDE_OPENVPN=y" >> .config #OPENVPN
@@ -108,6 +107,9 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_WYY=y" >> .config #网易云解锁
         echo "CONFIG_FIRMWARE_INCLUDE_DDNSTO=y" >> .config #ddnsto
         echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=y" >> .config #dns去广告
+        echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >> .config #WIREGUARD
+        echo "CONFIG_FIRMWARE_INCLUDE_XRAY=y" >> .config #XRAY
+        echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=y" >> .config #V2RAY
         #########################################################################################
         #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
         #格式如下：
