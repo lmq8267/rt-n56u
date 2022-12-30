@@ -27,6 +27,7 @@ ARIA2_ENABLED=n
 SOFTETHERVPN_ENABLE=n
 SHADOWSOCKS_ENABLE=n
 FRP_ENABLE=n
+TROJAN_ENABLE=n
 
 ifneq ($(CONFIG_FIRMWARE_INCLUDE_OPENSSH),y)
 ifeq ($(CONFIG_FIRMWARE_INCLUDE_DROPBEAR),y)
@@ -94,6 +95,10 @@ ifneq ($(filter y,$(CONFIG_FIRMWARE_INCLUDE_FRPC) $(CONFIG_FIRMWARE_INCLUDE_FRPS
 FRP_ENABLE=y
 endif
 
+ifneq ($(filter y,$(CONFIG_FIRMWARE_INCLUDE_WING) $(CONFIG_FIRMWARE_INCLUDE_TROJAN)),)
+TROJAN_ENABLE=y
+endif
+
 dir_y =
 dir_n =
 dir_  =
@@ -144,6 +149,7 @@ dir_$(CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME)      	+= adguardhome
 dir_$(CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS)	        += dns2tcp
 ifeq ($(CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS),y)
 dir_$(CONFIG_FIRMWARE_INCLUDE_V2RAY)	        += v2ray
+dir_$(CONFIG_FIRMWARE_INCLUDE_XRAY)		+= xray
 dir_$(CONFIG_FIRMWARE_INCLUDE_TROJAN)	        += trojan
 endif
 dir_$(CONFIG_FIRMWARE_INCLUDE_SSOBFS)                      += simple-obfs
@@ -161,6 +167,10 @@ dir_$(CONFIG_FIRMWARE_INCLUDE_MTR)		+= mtr
 dir_$(CONFIG_FIRMWARE_INCLUDE_SOCAT)	+= socat
 dir_$(CONFIG_FIRMWARE_INCLUDE_SRELAY)	+= srelay
 dir_$(CONFIG_FIRMWARE_INCLUDE_TUNSAFE) += tunsafe
+ifeq ($(CONFIG_FIRMWARE_INCLUDE_WIREGUARD),y)
+dir_y += wireguard
+dir_y += wireguard-tools
+endif
 ifeq ($(CONFIG_FIRMWARE_INCLUDE_SMBD36),y)
 dir_$(SAMBA_ENABLED)				+= samba36
 dir_y							+= wsdd2
@@ -223,6 +233,8 @@ endif
 dir_$(CONFIG_FIRMWARE_INCLUDE_KOOLPROXY)		+= koolproxy
 dir_$(CONFIG_FIRMWARE_INCLUDE_ADBYBY)		+= adbyby
 dir_$(CONFIG_FIRMWARE_INCLUDE_ALIDDNS)		+= aliddns
+dir_$(CONFIG_FIRMWARE_INCLUDE_DDNSTO)	        += ddnsto
+dir_$(CONFIG_FIRMWARE_INCLUDE_ALDRIVER)	        += aliyundrive-webdav
 ifdef CONFIG_MTD_UBI
 ifneq ($(STORAGE_ENABLED),y)
 dir_y						+= optware
