@@ -479,6 +479,57 @@ void restart_zerotier(void){
 }
 #endif
 
+#if defined(APP_DDNSTO)
+void stop_ddnsto(void){
+	eval("/usr/bin/ddnsto.sh","stop");
+}
+
+void start_ddnsto(void){
+	int ddnsto_enable = nvram_get_int("ddnsto_enable");
+	if ( ddnsto_enable == 1)
+		eval("/usr/bin/ddnsto.sh","start");
+}
+
+void restart_ddnsto(void){
+	stop_ddnsto();
+	start_ddnsto();
+}
+#endif
+
+#if defined(APP_WIREGUARD)
+void stop_wireguard(void){
+	eval("/usr/bin/wireguard.sh","stop");
+}
+
+void start_wireguard(void){
+	int wireguard_enable = nvram_get_int("wireguard_enable");
+	if ( wireguard_enable == 1)
+		eval("/usr/bin/wireguard.sh","start");
+}
+
+void restart_wireguard(void){
+	stop_wireguard();
+	start_wireguard();
+}
+#endif
+
+#if defined(APP_ALDRIVER)
+void stop_aldriver(void){
+	eval("/usr/bin/aliyundrive-webdav.sh","stop");
+}
+
+void start_aldriver(void){
+	int aldriver_enable = nvram_get_int("aliyundrive_enable");
+	if ( aldriver_enable == 1)
+		eval("/usr/bin/aliyundrive-webdav.sh","start");
+}
+
+void restart_aldriver(void){
+	stop_aldriver();
+	start_aldriver();
+}
+#endif
+
 #if defined(APP_ADBYBY)
 void stop_adbyby(void){
 	eval("/usr/bin/adbyby.sh","stop");
@@ -860,6 +911,15 @@ stop_services(int stopall)
 #endif
 #if defined(APP_ZEROTIER)
 	stop_zerotier();
+#endif
+#if defined(APP_DDNSTO)
+	stop_ddnsto();
+#endif
+#if defined(APP_WIREGUARD)
+	stop_wireguard();
+#endif
+#if defined(APP_ALDRIVER)
+	stop_aldriver();
 #endif
 #if defined(APP_ALIDDNS)
 	stop_aliddns();
