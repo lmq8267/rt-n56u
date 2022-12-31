@@ -1317,6 +1317,24 @@ handle_notifications(void)
 			restart_zerotier();
 		}
 #endif
+#if defined(APP_DDNSTO)
+		else if (strcmp(entry->d_name, RCN_RESTART_DDNSTO) == 0)
+		{
+			restart_ddnsto();
+		}
+#endif
+#if defined(APP_WIREGUARD)
+		else if (strcmp(entry->d_name, RCN_RESTART_WIREGUARD) == 0)
+		{
+			restart_wireguard();
+		}
+#endif
+#if defined(APP_ALDRIVER)
+		else if (strcmp(entry->d_name, RCN_RESTART_ALDRIVER) == 0)
+		{
+			restart_aldriver();
+		}
+#endif
 #if defined(APP_KOOLPROXY)
 		else if (strcmp(entry->d_name, RCN_RESTART_KOOLPROXY) == 0)
 		{
