@@ -937,6 +937,37 @@
 	};
 #endif
 
+#if defined(APP_WIREGUARD)
+	struct variable variables_WIREGUARD[] = {
+			{"wireguard_enable", "", NULL, EVM_RESTART_WIREGUARD},
+			{"wireguard_localip", "", NULL, EVM_RESTART_WIREGUARD},
+			{"wireguard_localkey", "", NULL, EVM_RESTART_WIREGUARD},
+			{"wireguard_peerkey", "", NULL, EVM_RESTART_WIREGUARD},
+			{"wireguard_peerip", "", NULL, EVM_RESTART_WIREGUARD},
+			{"wireguard_localip", "", NULL, EVM_RESTART_WIREGUARD},
+			{0,0,0,0}
+	};
+#endif
+
+#if defined(APP_ALDRIVER)
+	struct variable variables_ALDRIVER[] = {
+			{"aliyundrive_enable", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_refresh_token", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_auth_user", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_auth_password", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_read_buffer_size", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_cache_size", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_cache_ttl", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_host", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_port", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_root", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_domain_id", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_no_trash", "", NULL, EVM_RESTART_ALDRIVER},
+			{"ald_read_only", "", NULL, EVM_RESTART_ALDRIVER},
+			{0,0,0,0}
+		};
+#endif
+
 #if defined(APP_FRP)
 	struct variable variables_FrpConf[] = {
 			{"frpc_enable", "", NULL, EVM_RESTART_FRP},
@@ -985,6 +1016,14 @@
 			{"zerotier_nat", "", NULL, EVM_RESTART_ZEROTIER},
 			{"zero_staticnum_x", "", NULL, EVM_RESTART_ZEROTIER},
 			{"ZeroList", "Group", ARGV((char*)variables_ZeroConf_ZeroList, "8", "55", "zero_staticnum_x"), EVM_RESTART_ZEROTIER},
+			{0,0,0,0}
+	};
+#endif
+
+#if defined(APP_DDNSTO)
+	struct variable variables_DDNSTO[] = {
+			{"ddnsto_enable", "", NULL, EVM_RESTART_DDNSTO},
+			{"ddnsto_id", "", NULL, EVM_RESTART_DDNSTO},
 			{0,0,0,0}
 	};
 #endif
@@ -1338,11 +1377,20 @@
 #if defined(APP_ZEROTIER)
 		{"ZeroConf",		variables_ZeroConf},
 #endif
+#if defined(APP_DDNSTO)
+		{"DDNSTO",		variables_DDNSTO},
+#endif	
 #if defined(APP_ADBYBY)
 		{"AdbybyConf",		variables_AdbybyConf},
 #endif
 #if defined(APP_SMARTDNS)
 		{"SmartdnsConf",		variables_SmartdnsConf},
+#endif
+#if defined(APP_WIREGUARD)
+		{"WIREGUARD",		variables_WIREGUARD},
+#endif
+#if defined(APP_ALDRIVER)
+		{"ALDRIVER",		variables_ALDRIVER},
 #endif
 		{"DwebConf",		variables_DwebConf},
 		{"LANGUAGE",			variables_Language},
@@ -1446,6 +1494,9 @@
 #if defined(APP_ZEROTIER)
 		{EVM_RESTART_ZEROTIER,		EVT_RESTART_ZEROTIER,		RCN_RESTART_ZEROTIER,	0},
 #endif
+#if defined(APP_DDNSTO)
+		{EVM_RESTART_DDNSTO,		EVT_RESTART_DDNSTO,		RCN_RESTART_DDNSTO,	0},
+#endif	
 #if defined(APP_ADBYBY)
 		{EVM_RESTART_ADBYBY,		EVT_RESTART_ADBYBY,		RCN_RESTART_ADBYBY,	0},
 #endif
@@ -1457,6 +1508,12 @@
 #endif
 #if defined(APP_SMBD) || defined(APP_NMBD)
 		{EVM_RESTART_NMBD,		EVT_RESTART_NMBD,		RCN_RESTART_NMBD,	0},
+#endif
+#if defined(APP_WIREGUARD)
+		{EVM_RESTART_WIREGUARD,		EVT_RESTART_WIREGUARD,		RCN_RESTART_WIREGUARD,	0},
+#endif
+#if defined(APP_ALDRIVER)
+		{EVM_RESTART_ALDRIVER,		EVT_RESTART_ALDRIVER,		RCN_RESTART_ALDRIVER,	0},
 #endif
 		{EVM_RESTART_FIREWALL,		EVT_RESTART_FIREWALL,		RCN_RESTART_FIREWALL,	0},
 		{0,0,0,0}
