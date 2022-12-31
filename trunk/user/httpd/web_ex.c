@@ -2292,6 +2292,24 @@ static int pdnsd_status_hook(int eid, webs_t wp, int argc, char **argv)
 }
 #endif
 
+#if defined (APP_DDNSTO)
+static int ddnsto_status_hook(int eid, webs_t wp, int argc, char **argv)
+{
+	int ddnsto_status_code = pids("ddnsto");
+	websWrite(wp, "function ddnsto_status() { return %d;}\n", ddnsto_status_code);
+	return 0;
+}
+#endif
+
+#if defined (APP_ALDRIVER)
+static int aliyundrive_status_hook(int eid, webs_t wp, int argc, char **argv)
+{
+	int aliyundrive_status_code = pids("aliyundrive-webdav");
+	websWrite(wp, "function aliyundrive_status() { return %d;}\n", aliyundrive_status_code);
+	return 0;
+}
+#endif
+
 #if defined (APP_SMARTDNS)
 static int smartdns_status_hook(int eid, webs_t wp, int argc, char **argv)
 {
@@ -2553,6 +2571,11 @@ ej_firmware_caps_hook(int eid, webs_t wp, int argc, char **argv)
 #else
 	int found_app_zerotier = 0;
 #endif
+#if defined(APP_DDNSTO)
+	int found_app_ddnsto = 1;
+#else
+	int found_app_ddnsto = 0;
+#endif
 #if defined(APP_ADBYBY)
 	int found_app_adbyby = 1;
 #else
@@ -2587,6 +2610,16 @@ ej_firmware_caps_hook(int eid, webs_t wp, int argc, char **argv)
 	int has_ipv6 = 1;
 #else
 	int has_ipv6 = 0;
+#endif
+#if defined(APP_WIREGUARD)
+	int found_app_wireguard = 1;
+#else
+	int found_app_wireguard = 0;
+#endif
+#if defined(APP_ALDRIVER)
+	int found_app_aldriver = 1;
+#else
+	int found_app_aldriver = 0;
 #endif
 
 #if defined(USE_HW_NAT)
@@ -2756,6 +2789,9 @@ ej_firmware_caps_hook(int eid, webs_t wp, int argc, char **argv)
 		"function found_app_frp() { return %d;}\n"
 		"function found_app_wyy() { return %d;}\n"
 		"function found_app_zerotier() { return %d;}\n"
+		"function found_app_aldriver() { return %d;}\n"
+		"function found_app_ddnsto() { return %d;}\n"
+		"function found_app_wireguard() { return %d;}\n"
 		"function found_app_aliddns() { return %d;}\n"
 		"function found_app_xupnpd() { return %d;}\n"
 		"function found_app_mentohust() { return %d;}\n",
@@ -2787,6 +2823,9 @@ ej_firmware_caps_hook(int eid, webs_t wp, int argc, char **argv)
 		found_app_frp,
 		found_app_wyy,
 		found_app_zerotier,
+		found_app_ddnsto,
+		found_app_aldriver,
+		found_app_wireguard,
 		found_app_aliddns,
 		found_app_xupnpd,
 		found_app_mentohust
@@ -4561,6 +4600,15 @@ struct ej_handler ej_handlers[] =
 #if defined (APP_ADBYBY)
 	{ "adbyby_action", adbyby_action_hook},
 	{ "adbyby_status", adbyby_status_hook},
+#endif
+#if defined (APP_ZEROTIER)
+	{ "zerotier_status", zerotier_status_hook},
+#endif
+#if defined (APP_DDNSTO)
+	{ "ddnsto_status", ddnsto_status_hook},
+#endif
+#if defined (APP_ALDRIVER)
+	{ "aliyundrive_status", aliyundrive_status_hook},
 #endif
 #if defined (APP_SMARTDNS)
 	{ "smartdns_status", smartdns_status_hook},
