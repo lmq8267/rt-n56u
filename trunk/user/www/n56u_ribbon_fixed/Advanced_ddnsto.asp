@@ -152,9 +152,6 @@ function done_validating(action){
 				<br>点击跳转到DDNSTO官网管理平台,获取ID
 											</td>
 										</tr>
-										<tr> <th><#running_status#></th>
-                                            <td id="ddnsto_status" colspan="3"></td>
-                                        </tr>
 										<tr>
 										<th width="30%" style="border-top: 0 none;">启用DDNSTO客户端</th>
 											<td style="border-top: 0 none;">
