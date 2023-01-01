@@ -56,6 +56,8 @@ showMRULESList();
 }
 function showmenu(){
 showhide_div('allink', found_app_aliddns());
+showhide_div('dtolink', found_app_ddnsto());
+showhide_div('wirlink', found_app_wireguard());
 }
 function applyRule(){
 //	if(validForm()){
@@ -193,9 +195,15 @@ function showMRULESList(){
 								<li id="allink" style="display:none">
                                     <a href="Advanced_aliddns.asp"><#menu5_23_1#></a>
                                 </li>
+				<li id="dtolink" style="display:none">
+				    <a href="Advanced_ddnsto.asp"><#menu5_32_2#></a>
+				 </li>
 								<li class="active">
                                     <a href="Advanced_zerotier.asp"><#menu5_32_1#></a>
                                 </li>
+				<li id="wirlink" style="display:none">
+				   <a href="Advanced_wireguard.asp"><#menu5_35_1#></a>
+				 </li>  
                             </ul>
                         </div>
 								<div class="row-fluid">
@@ -222,7 +230,7 @@ function showMRULESList(){
 
 										</tr>
 										</tr>
-<tr><th>ZeroTier 网络ID</th>
+<tr><th>ZeroTier World Network ID</th>
 				<td>
 					<input type="text" class="input" name="zerotier_id" id="zerotier_id" style="width: 200px" value="<% nvram_get_x("","zerotier_id"); %>" />
 				</td>
