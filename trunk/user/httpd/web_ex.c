@@ -2286,8 +2286,8 @@ static int adbyby_status_hook(int eid, webs_t wp, int argc, char **argv)
 #if defined (APP_SHADOWSOCKS)
 static int pdnsd_status_hook(int eid, webs_t wp, int argc, char **argv)
 {
-	int pdnsd_status_code = pids("pdnsd");
-	websWrite(wp, "function pdnsd_status() { return %d;}\n", pdnsd_status_code);
+	int dns2tcp_status_code = pids("dns2tcp");
+	websWrite(wp, "function dns2tcp_status() { return %d;}\n", dns2tcp_status_code);
 	return 0;
 }
 #endif
