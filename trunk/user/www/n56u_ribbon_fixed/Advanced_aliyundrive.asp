@@ -36,25 +36,18 @@ $j(document).ready(function() {
 
 </script>
 <script>
-<% aliyundrive_status(); %>
+
 <% login_state_hook(); %>
 
 
 function initial(){
 	show_banner(2);
 	show_menu(5,22,0);
-	fill_status(aliyundrive_status());
 	show_footer();
+	showmenu();
 }
 
-function fill_status(status_code){
-	var stext = "Unknown";
-	if (status_code == 0)
-		stext = "<#Stopped#>";
-	else if (status_code == 1)
-		stext = "<#Running#>";
-	$("aliyundrive_status").innerHTML = '<span class="label label-' + (status_code != 0 ? 'success' : 'warning') + '">' + stext + '</span>';
-}
+
 function applyRule(){
 	showLoading();
 	
