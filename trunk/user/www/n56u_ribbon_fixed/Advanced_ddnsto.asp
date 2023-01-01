@@ -33,7 +33,7 @@ $j(document).ready(function() {
 
 </script>
 <script>
-<% ddnsto_status(); %>
+
 <% login_state_hook(); %>
 
 
@@ -41,7 +41,6 @@ function initial(){
 	show_banner(2);
 	show_menu(5,17,0);
 	showmenu();
-	fill_status(ddnsto_status());
 	show_footer();
 }
 
@@ -51,14 +50,6 @@ function showmenu(){
 	showhide_div('wirlink', found_app_wireguard());
 }
 
-function fill_status(status_code){
-	var stext = "Unknown";
-	if (status_code == 0)
-		stext = "<#Stopped#>";
-	else if (status_code == 1)
-		stext = "<#Running#>";
-	$("ddnsto_status").innerHTML = '<span class="label label-' + (status_code != 0 ? 'success' : 'warning') + '">' + stext + '</span>';
-}
 function applyRule(){
 	showLoading();
 	
