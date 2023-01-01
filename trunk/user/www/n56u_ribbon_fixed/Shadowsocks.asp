@@ -28,7 +28,7 @@
 	<script>
 		var node_global_max = 0;
 		<% shadowsocks_status(); %>
-		<% pdnsd_status(); %>
+		<% dns2tcp_status(); %>
 		<% rules_count(); %>
 		node_global_max = 0;
 		editing_ss_id = 0;
@@ -76,8 +76,8 @@
 			}
 			}); 
 			$j("#v2_tls").change(function() { 
-			if($j("#v2_tls").is(':checked')){
-			document.getElementById('v2_tls').value=1;
+			if ($j("#v2_tls").val() != '0') {
+			showhide_div('row_tj_tls_host', 1);
 			showhide_div('row_tj_tls_host', 1);
 			}else{
 			document.getElementById('v2_tls').value=0;
