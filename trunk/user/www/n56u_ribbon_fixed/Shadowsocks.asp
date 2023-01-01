@@ -120,6 +120,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			show_menu(13, 13, 0);
 			show_footer();
 			fill_ss_status(shadowsocks_status());
+			fill_dns2tcp_status(dns2tcp_status())
 			$("chnroute_count").innerHTML = '<#menu5_17_3#>' + chnroute_count();
 			$("gfwlist_count").innerHTML = '<#menu5_17_3#>' + gfwlist_count();
 			switch_ss_type();
@@ -213,6 +214,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			showhide_div('row_v2_net', 0);
 			showhide_div('row_v2_security', 0);
 			showhide_div('row_v2_tls', 0);
+			showhide_div('row_v2_flow', 0);
 			showhide_div('row_v2_type_tcp', 0);
 			showhide_div('row_v2_type', 0);
 			showhide_div('row_v2_vid', 0);
@@ -240,7 +242,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				showhide_div('row_v2_tls', 1);
 				//showhide_div('row_tj_tls_host', 1);
 				showhide_div('row_ssp_insecure', 1);
-			} else if (b == "v2ray") {
+			} else if (b == "v2ray" || b == "xray") {
 				switch_v2_type();
 				showhide_div('row_v2_aid', 1);
 				showhide_div('row_v2_vid', 1);
@@ -248,6 +250,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				showhide_div('row_v2_net', 1);
 				showhide_div('row_v2_type', 1);
 				showhide_div('row_v2_tls', 1);
+				showhide_div('row_v2_flow', 1);
 				showhide_div('row_v2_mux', 1);
 				//showhide_div('row_tj_tls_host', 1);
 				showhide_div('row_ssp_insecure', 1);
@@ -332,6 +335,9 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				}
 			}
 			showLoading();
+			showsdlinkList();
+			showsudlinkList();
+			shows5dlinkList();
 			document.form.action_mode.value = " Restart ";
 			document.form.current_page.value = "Shadowsocks.asp";
 			document.form.next_page.value = "";
@@ -468,12 +474,20 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 							//显示节点下拉列表 by 花妆男
 					// 渲染父节点  obj 需要渲染的数据 keyStr key需要去除的字符串
 					var keyStr = "ssconf_basic_json_";
-					var nodeList = document.getElementById("nodeList"); // 获取节点
-					var unodeList = document.getElementById("u_nodeList"); // 获取节点
-					var s5nodeList = document.getElementById("s5_nodeList"); // 获取节点
+					    nodeList = document.getElementById("nodeList"); // 获取节点
+					    unodeList = document.getElementById("u_nodeList"); // 获取节点
+					    s5nodeList = document.getElementById("s5_nodeList"); // 获取节点
+					$j(nodeList).find("option:gt(0)").remove();
+					$j(unodeList).find("option:gt(1)").remove();
+					$j(s5nodeList).find("option:gt(1)").remove();
 					for (var key in db_ss) { // 遍历对象
-						var optionObj = JSON.parse(db_ss[key]); // 字符串转为对象
-						//if(optionObj.ping != "failed"){   //过滤ping不通的节点
+					var optionObj = null;
+					try {
+						optionObj = JSON.parse(removeUselessChars(db_ss[key])); // 字符串转为对象
+						} catch (e) {
+						optionObj = null;
+						}
+						if (optionObj == null) continue;
 						var text = '[ ' + (optionObj.type ? optionObj.type : "类型获取失败") + ' ] ' + (optionObj
 							.alias ? optionObj.alias : "名字获取失败"); // 判断下怕获取失败 ，括号是运算的问题
 						// 添加 
@@ -514,17 +528,23 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 						//}
 					}
 					//订阅节点表格
-					var myss = new Array();
-					var i = 0;
+					var myss = ();
+					        i = 0;
 					for (var key in db_ss) { // 遍历对象
-						var dbss = JSON.parse(db_ss[key])
+					        var dbss = null;
+						try {
+						dbss = JSON.parse(removeUselessChars(db_ss[key]));//字符串转为对象
+						} catch (e) {
+						dbss = null;
+						}
+						if (dbss == null) continue;
 						dbss.ids = key.replace("ssconf_basic_json_", '');
 						myss[i] = dbss;
 						i = i + 1;
 						if (myss != null) {
-							var node_i = parseInt(key.replace("ssconf_basic_json_", ''));
-							if (node_i > node_global_max) {
-								node_global_max = node_i;
+						var node_i = parseInt(key.replace("ssconf_basic_json_", ''));
+						if (node_i > node_global_max) {
+						node_global_max = node_i;
 							}
 						}
 					}
@@ -688,9 +708,10 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			document.getElementById("v2_transport").value = 'tcp';
 			document.getElementById("v2_tcp_guise").value = 'none';
 			document.getElementById("v2_http_host").value = '';
-			document.getElementById("v2_http_path").value = '';
+			document.getElementById("v2_http_path").value = '/';
 			document.getElementById("v2_tls").value = 0;
-			document.getElementById("v2_tls").checked = false;
+			document.getElementById("v2_flow").value = '0';
+			//document.getElementById("v2_tls").checked = false;
 			document.getElementById("ssp_tls_host").value = '';
 			//"v2 tcp"
 			document.getElementById("v2_kcp_guise").value = 'none';
@@ -710,12 +731,9 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			document.getElementById("v2_quic_key").value = '';
 			document.getElementById("v2_quic_guise").value = 'none';
 			document.getElementById("v2_quic_security").value = 'none';
-			//trojan				
-			// document.getElementById("ssp_insecure").value = 0;
-			// document.getElementById("ssp_insecure").checked = false;
-			// document.getElementById("v2_tls").value = 1;
-			// document.getElementById("v2_tls").checked = true;
-			// document.getElementById("ssp_tls_host").value = '';
+			//sock5
+			document.getElementById("s5_password").value = '';
+			document.getElementById("s5_username").value = '';
 			switch_ss_type();
 		}
 		//编辑节点
@@ -739,7 +757,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				document.getElementById("ss_method").value = getProperty(ss, 'encrypt_method', 'none');
 				document.getElementById("ss_obfs").value = getProperty(ss, 'obfs', 'plain');
 				document.getElementById("ss_obfs_param").value = getProperty(ss, 'obfs_param', '');
-			} else if (type == "v2ray") {
+			} else if (type == "v2ray" || type == "xray") {
 				var transport = getProperty(ss, 'transport', 'tcp');
 				document.getElementById("ssp_insecure").value = getProperty(ss, 'insecure', 0);
 				document.getElementById("ssp_insecure").checked =  document.getElementById("ssp_insecure").value != 0;				
@@ -753,7 +771,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				document.getElementById("v2_http_host").value = getProperty(ss, 'http_host', '');
 				document.getElementById("v2_http_path").value = getProperty(ss, 'http_path', '');
 				document.getElementById("v2_tls").value = getProperty(ss, 'tls', 0);
-				document.getElementById("v2_tls").checked =  document.getElementById("v2_tls").value != 0;
+				//document.getElementById("v2_tls").checked =  document.getElementById("v2_tls").value != 0;
 				document.getElementById("ssp_tls_host").value = getProperty(ss, 'tls_host', '');
 				if (transport == "kcp") {
 					document.getElementById("v2_kcp_guise").value = getProperty(ss, 'kcp_guise', 'none');
@@ -777,8 +795,8 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			} else if (type == "trojan") {
 				document.getElementById("ssp_insecure").value = getProperty(ss, 'insecure', 0);
 				document.getElementById("ssp_insecure").checked =  document.getElementById("ssp_insecure").value != 0;
-				document.getElementById("v2_tls").value = getProperty(ss, 'tls', 0);
-				document.getElementById("v2_tls").checked =  document.getElementById("v2_tls") != 0;
+				document.getElementById("v2_tls").value = 1;
+				//document.getElementById("v2_tls").checked =  document.getElementById("v2_tls") != 0;
 				document.getElementById("ssp_tls_host").value = getProperty(ss, 'tls_host', '');
 			} else if (type == "socks5") {
 				//
@@ -816,7 +834,6 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			for (var key in row) {
 				ns[p + "_json_" + row[key].ids] = "deleting";
 			}
-			//console.log(ns)
 			document.getElementById("btn_del_link").value="正在删除节点";
 			$j.ajax({
 				url: "/applydb.cgi?userm1=del&p=ss",
@@ -948,11 +965,10 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				s.innerHTML = "<font color='red'>用户取消</font>";
 				return false;
 			}
+			initSSParams();
 			s.innerHTML = "";
-			//var ssu = ssrurl.match(/ssr:\/\/([A-Za-z0-9_-]+)/i);
 			var ssu = ssrurl.split('://');
-			//console.log(ssu.length);
-			if ((ssu[0] != "ssr" && ssu[0] != "ss" && ssu[0] != "vmess" && ssu[0] != "trojan") || ssu[1] == "") {
+			if ((ssu[0] != "ssr" && ssu[0] != "ss" && ssu[0] != "vmess" && ssu[0] != "vless" && ssu[0] != "trojan") || ssu[1] == "") {
 				s.innerHTML = "<font color='red'>无效格式</font>";
 				return false;
 			}
@@ -993,6 +1009,8 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				s.innerHTML = "<font color='green'>导入ShadowsocksR配置信息成功</font>";
 				return false;
 			} else if (ssu[0] == "ss") {
+			        var url0, param = "";
+				var sipIndex = ssu[1].indexOf("@");
 				var ploc = ssu[1].indexOf("#");
 				if (ploc > 0) {
 					url0 = ssu[1].substr(0, ploc);
@@ -1000,23 +1018,59 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				} else {
 					url0 = ssu[1]
 				}
-				var sstr = b64decsafe(url0);
+				if (sipIndex != -1) {
+				var userInfo = b64decsafe(url0.substr(0, sipIndex));
+				var temp = url0.substr(sipIndex + 1).split("/?");
+				var serverInfo = temp[0].split(":");
+				var server = serverInfo[0];
+				var port = serverInfo[1].replace("/", "");
+				var method, password, plugin, pluginOpts;
+				if (temp[1]) {
+				   var pluginInfo = decodeURIComponent(temp[1]);
+				   var pluginIndex = pluginInfo.indexOf(";");
+				   var pluginNameInfo = pluginInfo.substr(0, pluginIndex);
+				   plugin = pluginNameInfo.substr(pluginNameInfo.indexOf("=") + 1);
+				   pluginOpts = pluginInfo.substr(pluginIndex + 1);
+			        } 
+				var userInfoSplitIndex = userInfo.indexOf(":");
+				if (userInfoSplitIndex != -1) {
+				         method = userInfo.substr(0, userInfoSplitIndex);
+					 password = userInfo.substr(userInfoSplitIndex + 1);
+			        }
 				document.getElementById('ssp_type').value = "ss";
 				document.getElementById('ssp_type').dispatchEvent(event);
-				var team = sstr.split('@');
-				console.log(param);
-				var part1 = team[0].split(':');
-				var part2 = team[1].split(':');
-				document.getElementById('ssp_server').value = part2[0];
-				document.getElementById('ssp_prot').value = part2[1];
-				document.getElementById('ss_password').value = part1[1];
-				document.getElementById('ss_method').value = part1[0];
+				document.getElementById('ssp_server').value = server;
+				document.getElementById('ssp_prot').value = port;
+				document.getElementById('ss_password').value = password || "";
+				document.getElementById('ss_method').value = method || "";
+				document.getElementById('ss_plugin').value = plugin || "";
+				if (plugin != undefined && plugin != "") {
+				document.getElementById('ss_plugin_opts').value = pluginOpts || "";
+				}
 				if (param != undefined) {
 					document.getElementById('ssp_name').value = decodeURI(param);
 				}
 				s.innerHTML = "<font color='green'>导入Shadowsocks配置信息成功</font>";
+				}
+				else {
+					var sstr = b64decsafe(url0);
+					document.getElementById('ssp_type').value = "ss";
+					document.getElementById('ssp_type').dispatchEvent(event);
+					var team = sstr.split('@');
+					var part1 = team[0].split(':');
+					var part2 = team[1].split(':');
+					document.getElementById('ssp_server').value = part2[0];
+					document.getElementById('ssp_prot').value = part2[1];
+					document.getElementById('ss_password').value = part1[1];
+					document.getElementById('ss_method').value = part1[0];
+					s.innerHTML = "<font color='green'>导入Shadowsocks配置信息成功</font>";
+				}
+				if (param != undefined) {
+					document.getElementById('ssp_name').value = decodeURI(param);
+				}
 				return false;
 			} else if (ssu[0] == "trojan") {
+			        var url0, param = "";
 				var ploc = ssu[1].indexOf("#");
 				if (ploc > 0) {
 					url0 = ssu[1].substr(0, ploc);
@@ -1030,10 +1084,22 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				var team = sstr.split('@');
 				var password = team[0]
 				var serverPart = team[1].split(':');
-				var port = serverPart[1].split('?')[0];
+				var others = serverPart[1].split('?');
+				var port = parseInt(others[0]);
+				var queryParam = {}
+				if (others.length > 1) {
+					var queryParams = others[1]
+					var queryArray = queryParams.split('&');
+					for (i = 0; i < queryArray.length; i++) {
+						var params = queryArray[i].split('=');
+						queryParam[decodeURIComponent(params[0])] = decodeURIComponent(params[1] || '');
+					}
+				}
 				document.getElementById('ssp_server').value = serverPart[0];
-				document.getElementById('ssp_prot').value = port;
+				document.getElementById('ssp_prot').value = port || '443';;
 				document.getElementById('ss_password').value = password;
+				document.getElementById('v2_tls').value = '1';
+				document.getElementById('ssp_tls_host').value = queryParam.sni || '';
 				if (param != undefined) {
 					document.getElementById('ssp_name').value = decodeURI(param);
 				}
@@ -1041,7 +1107,6 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				return false;
 			} else if (ssu[0] == "vmess") {
 				var sstr = b64DecodeUnicode(ssu[1]);
-				console.log(sstr);
 				var ploc = sstr.indexOf("/?");
 				document.getElementById('ssp_type').value = "v2ray";
 				document.getElementById('ssp_type').dispatchEvent(event);
@@ -1056,15 +1121,21 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				document.getElementById('ssp_prot').value = ssm.port;
 				document.getElementById('v2_alter_id').value = ssm.aid;
 				document.getElementById('v2_vmess_id').value = ssm.id;
-				if (ssm.net == "tcp") {
-					document.getElementById('v2_tcp_guise').value = ssm.type;
-					document.getElementById('v2_http_host').value = ssm.host;
-					document.getElementById('v2_http_path').value = ssm.path;
-				} else {
-					document.getElementById('v2_kcp_guise').value = ssm.type;
-				}
 				document.getElementById('v2_transport').value = ssm.net;
 				document.getElementById('v2_transport').dispatchEvent(event);
+				if (ssm.net == "tcp") {
+					if (ssm.type && ssm.type != "http") {
+						ssm.type = "none"
+					}
+					document.getElementById('v2_tcp_guise').value = ssm.type;
+					document.getElementById('v2_http_host').value = ssm.host;
+					if (ssm.path != undefined) {
+					document.getElementById('v2_http_path').value = ssm.path;
+				}
+				else {
+						document.getElementById('v2_http_path').value = '/';
+					}
+				}
 				if (ssm.net == "ws") {
 					document.getElementById('v2_ws_host').value = ssm.host;
 					document.getElementById('v2_ws_path').value = ssm.path;
@@ -1075,12 +1146,87 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 				}
 				if (ssm.tls == "tls") {
 					document.getElementById('v2_tls').value = 1;
-					document.getElementById('v2_tls').checked = true;
+					//document.getElementById('v2_tls').checked = true;
 					document.getElementById('ssp_insecure').value = 1;
 					document.getElementById('ssp_insecure').checked = true;
 					document.getElementById('ssp_tls_host').value = ssm.host;
 				}
 				s.innerHTML = "<font color='green'>导入V2ray配置信息成功</font>";
+				return false;
+			} else if (ssu[0] == "vless") {
+				var url0, param = "";
+				var ploc = ssu[1].indexOf("#");
+				if (ploc > 0) {
+					url0 = ssu[1].substr(0, ploc);
+					param = ssu[1].substr(ploc + 1);
+				} else {
+					url0 = ssu[1]
+				}
+				if (param != undefined) {
+					document.getElementById('ssp_name').value = decodeURI(param);
+				}
+				var sstr = url0;
+				var team = sstr.split('@');
+				var password = team[0]
+				var serverPart = team[1].split(':');
+				var others = serverPart[1].split('?');
+				var port = others[0]
+				var queryParam = {}
+				if (others.length > 1) {
+					var queryParams = others[1]
+					var queryArray = queryParams.split('&');
+					for (i = 0; i < queryArray.length; i++) {
+						var params = queryArray[i].split('=');
+						queryParam[decodeURIComponent(params[0])] = decodeURIComponent(params[1] || '');
+					}
+				}
+				document.getElementById('ssp_server').value = serverPart[0];
+				document.getElementById('ssp_prot').value = port;
+				document.getElementById('v2_vmess_id').value = password;
+				document.getElementById('v2_alter_id').value = "0";
+				document.getElementById('ssp_type').value = "xray";
+				document.getElementById('ssp_type').dispatchEvent(event);
+				document.getElementById('v2_security').value = queryParam.encryption || "none";
+				document.getElementById('v2_transport').value = queryParam.type || "tcp";
+				document.getElementById('v2_transport').dispatchEvent(event);
+				if (queryParam.security == "tls") {
+					document.getElementById('v2_tls').value = '1';
+					document.getElementById('v2_flow').value = '0';
+					//document.getElementById('v2_tls').checked = true;
+					document.getElementById('ssp_insecure').value = 0;
+					document.getElementById('ssp_insecure').checked = false;
+					document.getElementById('ssp_tls_host').value = queryParam.sni || serverPart[0];
+				}
+				if (queryParam.type == "ws") {
+					document.getElementById('v2_ws_host').value = queryParam.host;
+					document.getElementById('v2_ws_path').value = queryParam.path;
+				}
+				if (queryParam.type == "h2") {
+					document.getElementById('v2_h2_host').value = queryParam.host;
+					document.getElementById('v2_h2_path').value = queryParam.path;
+				}
+				if (queryParam.security == "xtls") {
+					document.getElementById('v2_tls').value = '2';
+					if (queryParam.flow != undefined) {
+						if (queryParam.flow == 'xtls-rprx-direct') {
+							document.getElementById('v2_flow').value = '1';
+						}
+						else if (queryParam.flow == 'xtls-rprx-splice') {
+							document.getElementById('v2_flow').value = '2';
+						}
+						else {
+							document.getElementById('v2_flow').value = '0';
+						}
+					}
+					else {
+						document.getElementById('v2_flow').value = '1';
+					}
+					//document.getElementById('v2_tls').checked = true;
+					document.getElementById('ssp_insecure').value = 0;
+					document.getElementById('ssp_insecure').checked = false;
+					document.getElementById('ssp_tls_host').value = queryParam.sni || serverPart[0];
+				}
+				s.innerHTML = "<font color='green'>导入Xray配置信息成功</font>";
 				return false;
 			}
 		}
@@ -1135,7 +1281,6 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 		//点击保存节点按钮
 		function showNodeData(idName, obj) {
 			var nodeData = document.getElementById(idName);
-			//console.log(nodeData);
 			for (var key in obj) {
 				var tr = document.createElement("tr");
 				var td = document.createElement("td");
@@ -1178,7 +1323,9 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 					password: document.getElementById("ss_password").value,
 					coustom: "1",
 				}
-			} else if (type == "v2ray") {
+			} else if (type == "v2ray" || type == "xray") {
+				var http_pathnew = document.getElementById("v2_http_path").value;
+				if (http_pathnew == '') { document.getElementById("v2_http_path").value = '/'; }
 				var DataObj = {
 					type: document.getElementById("ssp_type").value,
 					alias: document.getElementById("ssp_name").value,
@@ -1194,6 +1341,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 					http_host: document.getElementById("v2_http_host").value,
 					http_path: document.getElementById("v2_http_path").value,
 					tls: document.getElementById("v2_tls").value,
+					flow: document.getElementById("v2_flow").value,
 					tls_host: document.getElementById("ssp_tls_host").value,
 					coustom: "1",
 				}
@@ -1250,7 +1398,6 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			var ns = {};
 			ns["ssconf_basic_json_" + ids] = post_dbus;
 			push_data(ns);
-			console.log(DataObj)
 		}
 		//post数据到后台处理
 		function push_data(obj) {
@@ -1270,19 +1417,20 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			});
 		}
 		function showsdlinkList() {
-			var key = "ssconf_basic_json_" + document.getElementById("nodeList").value;
-			var result = JSON.parse(db_ss[key]);
+			var value = document.getElementById("nodeList").value;
+			if (value > 0) {
+			var key = "ssconf_basic_json_" + value;
+			var result = JSON.parse(removeUselessChars(db_ss[key]));
 			document.getElementById("d_type").value = result.type;
-		}
-		function showsudlinkList() {
-			var key = "ssconf_basic_json_" + document.getElementById("u_nodeList").value;
-			var result = JSON.parse(db_ss[key]);
-			document.getElementById("ud_type").value = result.type;
+		   }	
 		}
 		function shows5dlinkList() {
-			var key = "ssconf_basic_json_" + document.getElementById("s5_nodeList").value;
-			var result = JSON.parse(db_ss[key]);
-			document.getElementById("s5_type").value = result.type;
+			var value = document.getElementById("s5_nodeList").value;
+			if (value > 0 ) {
+				var key = "ssconf_basic_json_" + value
+				var result = JSON.parse(removeUselessChars(db_ss[key]));
+				document.getElementById("s5_type").value = result.type;
+			}
 		}
 	</script>
 	<style>
@@ -1390,10 +1538,10 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 													一个兼容Shadowsocks、ShadowsocksR 、Vmess等协议的游戏加速工具。
 													<div><span style="color:#E53333;">注意:</span></div>
 													<div><span
-															style="color:#E53333;">1.chinadns-ng仅当绕过大陆模式有域名污染时才建议打开来分流防止污染！当然会占用一部分内存。</span>
+															style="color:#E53333;">若被编辑的节点正在运行使用，请完成后点击“应用设置”更新节点信息</span>
 													</div>
 													<div><span
-															style="color:#E53333;">2.服务器确定连上后,网页还是打不开,可尝试切换国外DNS</span>
+															style="color:#E53333;">运行状态不会实时更新，启动节点后需等待一段时间手动刷新页面获取运行状态</span>
 													</div>
 												</div>
 												<table width="100%" cellpadding="4" cellspacing="0" class="table">
@@ -1404,10 +1552,10 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 													</tr>
 													</th>
 													</tr>
-													<tr id="row_pdnsd_run" style="display:none;">
-														<th>PDNSD<#running_status#>
+													<tr id="row_pdnsd_run">
+														<th>dns2tcp<#running_status#>
 														</th>
-														<td id="pdnsd_status"></td>
+														<td id="dns2tcp_status"></td>
 													</tr>
 													</th>
 													</tr>
@@ -1779,6 +1927,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 																	<option value="ssr">SSR</option>
 																	<option value="trojan">Trojan</option>
 																	<option value="v2ray">V2ray</option>
+																	<option value="xray">VLess</option>
 																	<option value="socks5">SOCKS5</option>
 																</select>
 															</td>
@@ -1966,6 +2115,14 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 															</td>
 														</tr>
 														<tr id="row_v2_security" style="display:none;">
+														        <th width="50%">VmessId/VlessId (UUID)</th>
+														<td>
+														                <input type="text" class="input" size="15"
+														                        name="v2_vmess_id" id="v2_vmess_id"
+														                        style="width: 200px"
+														                        value="<% nvram_get_x("","v2_vid_x_0"); %>" />
+														       </td>
+														</tr>
 															<th width="50%">加密</th>
 															<td>
 																<select name="v2_security" id="v2_security"
@@ -2153,9 +2310,10 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 															</td>
 														</tr>
 														<tr id="row_v2_tls" style="display:none;">
-															<th>TLS</th>
+															<th>TLS/XTLS</th>
 															<td>
 																<input type="checkbox" name="v2_tls" id="v2_tls" >
+																
 
 															</td>
 														</tr>
