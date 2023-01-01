@@ -47,7 +47,9 @@ function initial(){
 }
 
 function showmenu(){
+showhide_div('dtolink', found_app_ddnsto());
 showhide_div('zelink', found_app_zerotier());
+showhide_div('wirlink', found_app_wireguard());
 }
 
 function textarea_scripts_enabled(v){
@@ -143,9 +145,14 @@ function change_aliddns_enable_bridge(mflag){
 								<li class="active">
                                     <a href="Advanced_aliddns.asp"><#menu5_23_1#></a>
                                 </li>
+				<li id="dtolink" style="display:none">
+				    <a href="Advanced_ddnsto.asp"><#menu5_32_2#></a>
 								<li id="zelink" style="display:none">
                                     <a href="Advanced_zerotier.asp"><#menu5_32_1#></a>
                                 </li>
+				<li id="wirlink" style="display:none">
+				    <a href="Advanced_wireguard.asp"><#menu5_35_1#></a>
+				 </li>   
                             </ul>
                         </div>
 								<div class="row-fluid">
