@@ -659,9 +659,14 @@ struct nvram_pair router_defaults[] = {
 	{ "ss_adblock_url", "https://gitee.com/privacy-protection-tools/anti-ad/raw/master/anti-ad-for-dnsmasq.conf"},
 	{ "ss_schedule_enable", "0" },
 	{ "ss_schedule", "00000000000" },
-
 	{ "ss_enable", "0" },
-	{ "ss_mode", "1" },
+	{ "trojan_local_enable", "0" },
+	{ "trojan_local", "/tmp/trojan" },
+	{ "trojan_link", "https://cdn.jsdelivr.net/gh/Padavan_CI/ssp/trojan" },
+	{ "v2_local_enable", "0" },
+	{ "v2_local", "/tmp/v2ray" },
+	{ "v2_link", "https://cdn.jsdelivr.net/gh/Padavan_CI/ssp/v2ray" },
+	{ "ss_mode", "2" },
 	{ "ss_server", "127.0.0.1" },
 	{ "ss_server_port", "8989" },
 	{ "ss_key", "Secret" },
@@ -677,16 +682,13 @@ struct nvram_pair router_defaults[] = {
 	{ "ss_proto_param", ""},
 	{ "ss_obfs", "plain"},
 	{ "ss_obfs_param", ""},
-
 	{ "ss-tunnel_enable", "0" },
 	{ "ss-tunnel_local_port", "5353" },
 	{ "ss-tunnel_remote", "8.8.4.4:53" },
 	{ "ss-tunnel_mtu", "1492" },
-	
 	{ "ss_update_chnroute", "0" },
 	{ "ss_update_gfwlist", "0" },
 	{ "ssp_staticnum_x", "0" },
-	
 	{ "v2_type_tcp", "none" },
 	{ "v2_type_mkcp", "none" },
 	{ "v2_mkcp_mtu", "1350" },
@@ -728,6 +730,9 @@ struct nvram_pair router_defaults[] = {
 	{ "d_keyword_y", "" },
 	{ "d_update_link", "" },
 	{ "ss_keyword", "过期时间/剩余流量" },
+	{ "ss_watchcat", "1" },
+	{ "ss_update_chnroute", "0" },
+	{ "ss_update_gfwlist", "0" },
 
 	
 	/* AdguargHome */
