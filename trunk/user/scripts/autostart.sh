@@ -23,7 +23,7 @@ do
 		break
 	fi
 	sleep 5
-	ping -c 1 -W 1 -q www.google.com 1>/dev/null 2>&1
+	ping -c 1 -W 1 -q www.qq.com 1>/dev/null 2>&1
 	if [ "$?" == "0" ]; then
 		break
 	fi
