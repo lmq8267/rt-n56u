@@ -28,7 +28,7 @@
 	<script>
 		var node_global_max = 0;
 		<% shadowsocks_status(); %>
-		<% dns2tcp_status(); %>
+		<% pdnsd_status(); %>
 		<% rules_count(); %>
 		node_global_max = 0;
 		editing_ss_id = 0;
@@ -120,7 +120,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 			show_menu(13, 13, 0);
 			show_footer();
 			fill_ss_status(shadowsocks_status());
-			fill_dns2tcp_status(dns2tcp_status())
+			fill_pdnsd_status(pdnsd_status())
 			$("chnroute_count").innerHTML = '<#menu5_17_3#>' + chnroute_count();
 			$("gfwlist_count").innerHTML = '<#menu5_17_3#>' + gfwlist_count();
 			switch_ss_type();
@@ -1553,9 +1553,9 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 													</th>
 													</tr>
 													<tr id="row_pdnsd_run">
-														<th>dns2tcp<#running_status#>
+														<th>pdnsd<#running_status#>
 														</th>
-														<td id="dns2tcp_status"></td>
+														<td id="pdnsd_status"></td>
 													</tr>
 													</th>
 													</tr>
@@ -1673,7 +1673,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 														<td>
 															<select name="pdnsd_enable" id="pdnsd_enable" class="input"
 																style="width: 200px;" onchange="switch_dns()">
-																<option value="0">使用dns2tcp查询</option>
+																<option value="0">使用pdnsd查询</option>
 																<option value="1">使用其它服务器查询</option>
 															</select>
 														</td>
