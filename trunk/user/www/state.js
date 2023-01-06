@@ -391,60 +391,60 @@ tabtitle[6] = new Array("", "<#menu5_6_2#>", "<#menu5_6_5#>", "<#menu5_6_1#>", "
 tabtitle[7] = new Array("", "<#menu5_10_1#>", "<#menu5_10_2#>", "<#menu5_10_3#>" , "<#menu5_22_1#>");
 tabtitle[8] = new Array("", "<#menu5_11#>", "<#menu5_12#>", "WAN", "", "", "", "", "", "", "");
 tabtitle[9] = new Array("", "<#menu5_7_2#>", "<#menu5_7_3#>", "<#menu5_7_5#>", "<#menu5_7_6#>", "<#menu5_7_8#>");
-tabtitle[10] = new Array("");//认证
-tabtitle[11] = new Array("");//DNS
-tabtitle[12] = new Array("");//广告
-tabtitle[13] = new Array("");//科学
-tabtitle[14] = new Array("");//内网
-tabtitle[15] = new Array("");//存储
-tabtitle[16] = new Array("");//音乐
-if (found_app_scutclient()){
-	tabtitle[10].push("<#menu5_13_1#>");
-	tabtitle[9].push("<#menu5_7_9#>");
-}
-if (found_app_mentohust()){
-	tabtitle[10].push("<#menu5_13_2#>");
-	tabtitle[9].push("<#menu5_7_10#>");
-}
-if (found_app_dnsforwarder()){
-	tabtitle[11].push("<#menu5_14_1#>");
-}
-if (found_app_smartdns()){
-	tabtitle[11].push("<#menu5_14_2#>");
+tabtitle[10] = new Array("");//科学上网
+tabtitle[11] = new Array("");//广告管理
+tabtitle[12] = new Array("");//DNS服务
+tabtitle[13] = new Array("");//穿透服务
+tabtitle[14] = new Array("");//内网穿透
+tabtitle[15] = new Array("");//音乐解锁
+tabtitle[16] = new Array("");//阿里云盘
+if (found_app_shadowsocks()){
+	tabtitle[10].push("<#menu5_16#>");
+	tabtitle[10].push("<#5_16_20#>");
 }
 if (found_app_adbyby()){
-	tabtitle[12].push("<#menu5_15_1#>");
+	tabtitle[11].push("<#menu5_20#>");
+	tabtitle[11].push("<#menu5_20_1#>");
 }
 if (found_app_koolproxy()){
-	tabtitle[12].push("<#menu5_15_2#>");
+	tabtitle[11].push("<#menu5_20#>");
+	tabtitle[11].push("<#menu5_26_1#>");
+}
+if (found_app_smartdns()){
+	tabtitle[12].push("<#menu5_29#>");
+	tabtitle[12].push("<#menu5_24_1#>");
 }
 if (found_app_adguardhome()){
-	tabtitle[12].push("<#menu5_15_3#>");
-}
-if (found_app_shadowsocks()){
-	tabtitle[13].push("<#menu5_16_0#>");
-//	tabtitle[13].push("<#menu5_16_20#>");
-}
-if (found_app_frp()){
-	tabtitle[14].push("<#menu5_17_1#>");
-	tabtitle[9].push("<#menu5_17_1#>");
-}
-if (found_app_npc()){
-	tabtitle[14].push("<#menu5_17_2#>");
-	tabtitle[9].push("<#menu5_17_2#>");
+	tabtitle[12].push("<#menu5_29#>");
+	tabtitle[12].push("<#menu5_28_1#>");
 }
 if (found_app_aliddns()){
-	tabtitle[14].push("<#menu5_17_3#>");
+	tabtitle[13].push("<#menu5_30#>");
+	tabtitle[13].push("<#menu5_23_1#>");
+}
+if (found_app_ddnsto()){
+	tabtitle[13].push("<#menu5_30#>");
+	tabtitle[13].push("<#menu5_32_2#>");
 }
 if (found_app_zerotier()){
-	tabtitle[14].push("<#menu5_17_4#>");
+	tabtitle[13].push("<#menu5_30#>");
+	tabtitle[13].push("<#menu5_32_1#>");
 }
-if (found_app_caddy()){
-	tabtitle[15].push("<#menu5_18_1#>");
+if (found_app_wireguard()){
+	tabtitle[13].push("<#menu5_30#>");
+	tabtitle[13].push("<#menu5_35_1#>");
+}
+if (found_app_frp()){
+	tabtitle[14].push("<#menu5_25#>");
+	tabtitle[14].push("<#menu5_25_1#>");
 }
 if (found_app_wyy()){
-	tabtitle[16].push("<#menu5_19_1#>");
+	tabtitle[15].push("<#menu5_31#>");
+	tabtitle[15].push("<#menu5_31_1#>");
 }
+if (found_app_aliyundrive()){
+	tabtitle[16].push("<#menu5_36#>");
+	tabtitle[16].push("<#menu5_36_1#>");
 
 //Level 3 Tab title
 tablink[0] = new Array("", "Advanced_Wireless2g_Content.asp", "Advanced_WGuest2g_Content.asp", "Advanced_WMode2g_Content.asp", "Advanced_ACL2g_Content.asp", "Advanced_WSecurity2g_Content.asp", "Advanced_WAdvanced2g_Content.asp");
@@ -464,101 +464,67 @@ tablink[13] = new Array("");
 tablink[14] = new Array("");
 tablink[15] = new Array("");
 tablink[16] = new Array("");
-if (found_app_scutclient()){
-	tablink[10].push("scutclient.asp");
-	tablink[9].push("scutclient_log.asp");
-}
-if (found_app_mentohust()){
-	tablink[10].push("mentohust.asp");
-	tablink[9].push("mentohust_log.asp");
-}
-if (found_app_dnsforwarder()){
-	tablink[11].push("dns-forwarder.asp");
-}
-if (found_app_smartdns()){
-	tablink[11].push("Advanced_smartdns.asp");
+if (found_app_shadowsocks()){
+	tablink[10].push("Shadowsocks.asp");
+//	tablink[10].push("Shadowsocks_log.asp");
 }
 if (found_app_adbyby()){
-	tablink[12].push("Advanced_adbyby.asp");
+	tablink[11].push("Advanced_adbyby.asp");
 }
 if (found_app_koolproxy()){
-	tablink[12].push("Advanced_koolproxy.asp");
+	tablink[11].push("Advanced_koolproxy.asp");
+}
+if (found_app_smartdns()){
+	tablink[12].push("Advanced_smartdns.asp");
 }
 if (found_app_adguardhome()){
 	tablink[12].push("Advanced_adguardhome.asp");
 }
-if (found_app_shadowsocks()){
-	tablink[13].push("Shadowsocks.asp");
-//	tablink[13].push("Shadowsocks_log.asp");
+if (found_app_aliddns()){
+	tablink[13].push("Advanced_aliddns.asp");
+}
+if (found_app_ddnsto()){
+	tablink[13].push("Advanced_ddnsto.asp");
+}
+if (found_app_zerotier()){
+	tablink[13].push("Advanced_zerotier.asp");
+}
+if (found_app_wireguard()){
+	tablink[13].push("Advanced_wireguard.asp");
 }
 if (found_app_frp()){
 	tablink[14].push("Advanced_frp.asp");
-	tablink[9].push("Advanced_frp_log.asp");
-}
-if (found_app_npc()){
-	tablink[14].push("Advanced_npc.asp");
-	tablink[9].push("Advanced_npc_log.asp");
-}
-if (found_app_aliddns()){
-	tablink[14].push("Advanced_aliddns.asp");
-}
-if (found_app_zerotier()){
-	tablink[14].push("Advanced_zerotier.asp");
-}
-if (found_app_caddy()){
-	tablink[15].push("Advanced_caddy.asp");
 }
 if (found_app_wyy()){
-	tablink[16].push("Advanced_wyy.asp");
+	tablink[15].push("Advanced_wyy.asp");
 }
-
+if (found_app_aliyundrive()){
+	tablink[16].push("Advanced_aliyundrive.asp");
+}	
 
 //Level 2 Menu
 menuL2_title = new Array("", "<#menu5_11#>", "<#menu5_12#>", "<#menu5_2#>", "<#menu5_3#>", "<#menu5_5#>", "<#menu5_4#>", "<#menu5_6#>", "<#menu5_10#>", "<#menu5_9#>", "<#menu5_7#>");
-if (found_app_scutclient() || found_app_mentohust()){
-	menuL2_title.push("<#menu5_13#>");
-} else menuL2_title.push("");
-if (found_app_dnsforwarder() || found_app_smartdns()){
-	menuL2_title.push("<#menu5_14#>");
-} else menuL2_title.push("");
-if (found_app_koolproxy() || found_app_adbyby() || found_app_adguardhome()){
-	menuL2_title.push("<#menu5_15#>");
-}else menuL2_title.push("");
 if (found_app_shadowsocks()){
 	menuL2_title.push("<#menu5_16#>");
 } else menuL2_title.push("");
-if (found_app_frp() || found_app_npc() || found_app_aliddns() || found_app_zerotier()){
-	menuL2_title.push("<#menu5_17#>");
+if (found_app_koolproxy() || found_app_adbyby()){
+	menuL2_title.push("<#menu5_20#>");
+}else menuL2_title.push("");
+if (found_app_smartdns() || found_app_adguardhome()){
+	menuL2_title.push("<#menu5_29#>");
 } else menuL2_title.push("");
-if (found_app_caddy()){
-	menuL2_title.push("<#menu5_18#>");
+if (found_app_aliddns() || found_app_ddnsto() || found_app_zerotier() || found_app_wireguard()){
+	menuL2_title.push("<#menu5_30#>");
+} else menuL2_title.push("");	
+if (found_app_frp()){
+	menuL2_title.push("<#menu5_25#>");
 } else menuL2_title.push("");
 if (found_app_wyy()){
-	menuL2_title.push("<#menu5_19#>");
+	menuL2_title.push("<#menu5_31#>");
 } else menuL2_title.push("");
-
-menuL2_link  = new Array("", tablink[0][1], tablink[1][1], tablink[2][1], tablink[3][1], tablink[4][1], tablink[5][1], tablink[6][1], tablink[7][1], support_2g_radio() ? tablink[8][1] : "Main_EStatus_Content.asp", tablink[9][1]);
-if (found_app_scutclient() || found_app_mentohust()){
-	menuL2_link.push(tablink[10][1]);
-} else menuL2_link.push("");
-if (found_app_dnsforwarder() || found_app_smartdns()){
-	menuL2_link.push(tablink[11][1]);
-} else menuL2_link.push("");
-if (found_app_koolproxy() || found_app_adbyby() || found_app_adguardhome()){
-	menuL2_link.push(tablink[12][1]);
-}else menuL2_link.push("");
-if (found_app_shadowsocks()){
-	menuL2_link.push(tablink[13][1]);
-} else menuL2_link.push("");
-if (found_app_frp() || found_app_npc() || found_app_aliddns() || found_app_zerotier()){
-	menuL2_link.push(tablink[14][1]);
-} else menuL2_link.push("");
-if (found_app_caddy()){
-	menuL2_link.push(tablink[15][1]);
-} else menuL2_link.push("");
-if (found_app_wyy()){
-	menuL2_link.push(tablink[16][1]);
-} else menuL2_link.push("");
+if (found_app_aldriver()){
+	menuL2_title.push("<#menu5_36#>");
+} else menuL2_title.push("");
 
 //Level 1 Menu in Gateway, Router mode
 menuL1_title = new Array("", "<#menu1#>", "", "<#menu2#>", "<#menu6#>", "<#menu4#>", "<#menu5_8#>", "<#menu5#>");
@@ -707,6 +673,11 @@ function show_menu(L1, L2, L3){
 function show_footer(){
 	footer_code = '<div align="center" class="bottom-image"></div>\n';
 	footer_code +='<div align="center" class="copyright"><#footer_copyright_desc#></div>\n';
+	footer_code +='<div align="center">\n';
+	footer_code +='  <span>Highcharts by Torstein Hønsi & <a href="http://www.highcharts.com">Highsoft</a></span></br>\n';
+	footer_code +='  <span>Big icons designed by <a href="http://www.freepik.com">Freepik</a></br></span>\n';
+	footer_code +='  <span>Non-Commercial Use Only</span></br>\n';
+	footer_code +='</div>\n';
 
 	$("footer").innerHTML = footer_code;
 
@@ -1430,16 +1401,6 @@ var w_sys = '<% nvram_get_x("", "w_sys"); %>';
 var w_usb = '<% nvram_get_x("", "w_usb"); %>';
 var w_net = '<% nvram_get_x("", "w_net"); %>';
 var w_log = '<% nvram_get_x("", "w_log"); %>';
-var w_scu = '<% nvram_get_x("", "w_scu"); %>';
-var w_dnsf = '<% nvram_get_x("", "w_dnsf"); %>';
-var w_ss = '<% nvram_get_x("", "w_ss"); %>';
-var w_men = '<% nvram_get_x("", "w_men"); %>';
-var w_adbyby = '<% nvram_get_x("", "w_adbyby"); %>';
-var w_pdnsd = '<% nvram_get_x("", "w_pdnsd"); %>';
-var w_aliddns = '<% nvram_get_x("", "w_aliddns"); %>';
-var w_frp = '<% nvram_get_x("", "w_frp"); %>';
-var w_caddy = '<% nvram_get_x("", "w_caddy"); %>';
-var w_wyy = '<% nvram_get_x("", "w_wyy"); %>';
 
 if (w_ai==0){
 	menuL1_link[2] = "";
@@ -1478,48 +1439,6 @@ if (w_log==0){
 	menuL2_title[10] = "";
 	tabtitle[9] = new Array("");
 	tablink[9] = new Array("");
-}
-if (w_scu==0){
-	menuL2_link[11] = "";
-	menuL2_title[11] = "";
-	tabtitle[10] = new Array("");
-	tablink[10] = new Array("");
-}
-if (w_dnsf==0){
-	menuL2_link[12] = "";
-	menuL2_title[12] = "";
-	tabtitle[11] = new Array("");
-	tablink[11] = new Array("");
-}
-if (w_adbyby==0){
-	menuL2_link[13] = "";
-	menuL2_title[13] = "";
-	tabtitle[12] = new Array("");
-	tablink[12] = new Array("");
-}
-if (w_ss==0){
-	menuL2_link[14] = "";
-	menuL2_title[14] = "";
-	tabtitle[13] = new Array("");
-	tablink[13] = new Array("");
-}
-if (w_frp==0){
-	menuL2_link[15] = "";
-	menuL2_title[15] = "";
-	tabtitle[14] = new Array("");
-	tablink[14] = new Array("");
-}
-if (w_caddy==0){
-	menuL2_link[16] = "";
-	menuL2_title[16] = "";
-	tabtitle[15] = new Array("");
-	tablink[15] = new Array("");
-}
-if (w_wyy==0){
-	menuL2_link[17] = "";
-	menuL2_title[17] = "";
-	tabtitle[16] = new Array("");
-	tablink[16] = new Array("");
 }
 
 (function($){
